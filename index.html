@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ALTER EGO · Discover Your Multiverse Identity</title>
+  <meta name="description" content="Discover the version of you that lives in another universe. Take the 8-question personality quiz and meet your alternate-universe self.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22 fill=%22%23c084fc%22>✦</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Fixed Cosmic Starfield & Floating Nebulae -->
+  <canvas id="cosmic-canvas" aria-hidden="true"></canvas>
+  <div class="cosmic-nebula-glow nebula-1" aria-hidden="true"></div>
+  <div class="cosmic-nebula-glow nebula-2" aria-hidden="true"></div>
+  <div class="cosmic-nebula-glow nebula-3" aria-hidden="true"></div>
+
+  <!-- Main App Shell -->
+  <div id="app">
+    <!-- Top Header Navigation -->
+    <header class="app-header">
+      <button id="btn-brand-home" class="brand-logo" aria-label="Alter Ego Home">
+        <span class="brand-symbol">✦</span>
+        <span>ALTER EGO</span>
+      </button>
+
+      <div class="header-controls">
+        <button id="btn-header-home" class="nav-home-btn" aria-label="Return to Home" title="Return to Home">
+          <i class="fa-solid fa-house"></i>
+          <span>Home</span>
+        </button>
+        <div class="portal-tag">
+          <span class="portal-dot"></span>
+          <span>MULTIVERSE PORTAL ONLINE</span>
+        </div>
+        <button id="btn-toggle-sound" class="icon-btn" aria-label="Toggle celestial audio effects" title="Toggle audio effects">
+          <i id="sound-icon" class="fa-solid fa-volume-high"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Viewport -->
+    <main class="main-viewport">
+      
+      <!-- ========================================== -->
+      <!-- VIEW 1: LANDING PAGE -->
+      <!-- ========================================== -->
+      <section id="view-landing" class="view-container">
+        <div class="hero-section">
+          <div class="hero-pill">
+            <i class="fa-solid fa-sparkles"></i> Multiverse Resonance Engine 2.0
+          </div>
+          <h1 class="hero-title">ALTER EGO</h1>
+          <p class="hero-tagline">Discover the version of you that lives in another universe.</p>
+          <p class="hero-desc">Answer a few questions. Meet the person you could have been.</p>
+
+          <!-- Action Button to Start Quiz -->
+          <div class="hero-actions">
+            <button id="btn-start-quiz" class="btn-cosmic-primary">
+              <span>CREATE MY ALTER EGO</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <!-- Previously Saved Alter Ego Card (Dynamically Shown) -->
+          <div id="landing-saved-card" class="last-ego-card hidden">
+            <div class="last-ego-header">
+              <span class="last-ego-label"><i class="fa-solid fa-bookmark"></i> YOUR LAST ALTER EGO</span>
+              <span id="last-ego-universe" class="last-ego-universe">UNIVERSE #000-ALPHA</span>
+            </div>
+            <div class="last-ego-body">
+              <div class="last-ego-info">
+                <span id="last-ego-name" class="last-ego-name">Lyra Reverie</span>
+                <span id="last-ego-archetype" class="last-ego-archetype">✦ THE DREAM CHASER</span>
+              </div>
+              <button id="btn-view-saved" class="btn-secondary">
+                <span>VIEW PROFILE</span>
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Startup Value / Feature Highlights -->
+          <div class="feature-grid">
+            <div class="feature-card">
+              <div class="feature-icon"><i class="fa-solid fa-compass-drafting"></i></div>
+              <h2 class="feature-title">8 Multiverse Dilemmas</h2>
+              <p class="feature-desc">Calibrated psychological scenarios that pinpoint your alternate-dimensional resonance.</p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon"><i class="fa-solid fa-dna"></i></div>
+              <h2 class="feature-title">Deterministic Engine</h2>
+              <p class="feature-desc">Six profound archetypes mapped through mathematical scoring. Zero random rolls.</p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon"><i class="fa-solid fa-comment-nodes"></i></div>
+              <h2 class="feature-title">Ask Your Alter Ego</h2>
+              <p class="feature-desc">Converse directly across reality folds with your generated persona in real time.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 2: QUIZ VIEW (8 Multi-step Questions) -->
+      <!-- ========================================== -->
+      <section id="view-quiz" class="view-container hidden" aria-live="polite">
+        <div class="quiz-card">
+          <!-- Progress Bar -->
+          <div class="quiz-progress-bar-container" role="progressbar" aria-valuenow="12" aria-valuemin="0" aria-valuemax="100">
+            <div id="quiz-progress-fill" class="quiz-progress-fill" style="width: 12.5%;"></div>
+          </div>
+
+          <!-- Question Header & Counter -->
+          <div class="quiz-header-meta">
+            <div class="quiz-header-left">
+              <button id="btn-quiz-home" class="view-home-btn" aria-label="Return to Home" title="Return to Home">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+              </button>
+              <span id="question-counter" class="question-counter">QUESTION 01 / 08</span>
+            </div>
+            <span id="question-progress-pct" class="question-progress-pct">12% COMPLETED</span>
+          </div>
+
+          <!-- Question Title -->
+          <h2 id="question-title" class="question-title">Your ideal environment is...</h2>
+
+          <!-- Four Selectable Answers -->
+          <div id="quiz-options-container" class="options-grid" role="radiogroup" aria-label="Quiz Answer Options">
+            <!-- Dynamically populated via JS -->
+          </div>
+
+          <!-- Quiz Back and Next Buttons -->
+          <div class="quiz-nav-row">
+            <button id="btn-quiz-back" class="btn-nav btn-nav-back" disabled>
+              <i class="fa-solid fa-arrow-left"></i>
+              <span>BACK</span>
+            </button>
+            <button id="btn-quiz-next" class="btn-nav btn-nav-next" disabled>
+              <span>NEXT</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 3: SCANNING / CALCULATING INTERLUDE -->
+      <!-- ========================================== -->
+      <section id="view-calculating" class="view-container hidden" aria-live="polite">
+        <div class="calculating-card">
+          <div class="resonance-orb-wrapper">
+            <div class="resonance-ring"></div>
+            <div class="resonance-orb"></div>
+            <div class="resonance-center-symbol">✧</div>
+          </div>
+          <h2 class="calc-title">Tuning Multiverse Frequencies</h2>
+          <p id="calc-status-text" class="calc-status">Scanning parallel coordinate lattices...</p>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 4: RESULT PAGE -->
+      <!-- ========================================== -->
+      <section id="view-result" class="view-container hidden">
+        <div class="result-card-container">
+          
+          <!-- Identity Card Document -->
+          <article id="alter-ego-card-element" class="alter-ego-main-card">
+            <!-- Header Metadata -->
+            <div class="ego-meta-bar">
+              <div class="ego-meta-left">
+                <button id="btn-result-home" class="view-home-btn" aria-label="Return to Home" title="Return to Home">
+                  <i class="fa-solid fa-house"></i>
+                  <span>Home</span>
+                </button>
+                <span id="ego-universe-badge" class="ego-multiverse-badge">UNIVERSE #842-EPSILON</span>
+              </div>
+              <span class="ego-verify-badge">
+                <i class="fa-solid fa-circle-check" style="color: #34d399;"></i>
+                <span>CERTIFIED PARALLEL CONSCIOUSNESS</span>
+              </span>
+            </div>
+
+            <div class="ego-header-block">
+              <div id="ego-archetype-pill" class="ego-archetype-pill">
+                <span id="ego-archetype-symbol">✦</span>
+                <span id="ego-archetype-name">THE ARCHITECT</span>
+              </div>
+              <h1 id="ego-character-name" class="ego-character-name">Cipher Thorne · Grand Strategist</h1>
+              <p id="ego-traits-tagline" class="ego-traits-tagline">Analytical, strategic, thoughtful</p>
+            </div>
+
+            <!-- Signature Quote Box -->
+            <div class="ego-quote-box">
+              <p id="ego-signature-quote" class="ego-quote-text">"Chaos is merely an order we have not yet solved."</p>
+            </div>
+
+            <!-- "In another universe, you..." Story Lore -->
+            <div class="ego-lore-section">
+              <h3 class="ego-section-heading">
+                <i class="fa-solid fa-shuttle-space"></i>
+                <span>IN ANOTHER UNIVERSE, YOU...</span>
+              </h3>
+              <p id="ego-in-another-universe" class="ego-lore-text">
+                In another universe, you engineered the Great Orbital Monoliths that balance the gravitational tides of three sister planets...
+              </p>
+            </div>
+
+            <!-- Trait Matrix Grid -->
+            <div class="ego-traits-grid">
+              <div class="ego-trait-card">
+                <span class="ego-trait-label"><i class="fa-solid fa-shield-halved"></i> CORE STRENGTH</span>
+                <span id="ego-core-strength" class="ego-trait-value">Penetrating analytical vision & structural foresight</span>
+              </div>
+              <div class="ego-trait-card">
+                <span class="ego-trait-label"><i class="fa-solid fa-eye"></i> HIDDEN TRAIT</span>
+                <span id="ego-hidden-trait" class="ego-trait-value">Secretly holds immense sentimentality for protective systems</span>
+              </div>
+              <div class="ego-trait-card">
+                <span class="ego-trait-label"><i class="fa-solid fa-bolt"></i> SUPERPOWER</span>
+                <span id="ego-superpower" class="ego-trait-value">Omni-Matrix Synthesis — predicting cascades ten steps ahead</span>
+              </div>
+              <div class="ego-trait-card">
+                <span class="ego-trait-label"><i class="fa-solid fa-heart-crack"></i> WEAKNESS</span>
+                <span id="ego-weakness" class="ego-trait-value">Over-intellectualizing matters of the heart; analysis paralysis</span>
+              </div>
+              <div class="ego-trait-card" style="grid-column: 1 / -1;">
+                <span class="ego-trait-label"><i class="fa-solid fa-wand-magic"></i> AESTHETIC</span>
+                <span id="ego-aesthetic" class="ego-trait-value">Prismatic Brutalism / Neo-Obsidian Geometry</span>
+              </div>
+            </div>
+
+            <!-- Visual Personality Breakdown (6 Archetypes) -->
+            <div class="ego-breakdown-section">
+              <h3 class="ego-section-heading">
+                <i class="fa-solid fa-chart-simple"></i>
+                <span>COSMIC ARCHETYPE RESONANCE BREAKDOWN</span>
+              </h3>
+              <div id="ego-breakdown-grid" class="ego-breakdown-grid">
+                <!-- Dynamically rendered bars -->
+              </div>
+            </div>
+          </article>
+
+          <!-- Working Action Buttons -->
+          <div class="ego-actions-row">
+            <button id="btn-save-ego" class="btn-action primary" title="Save Alter Ego to local device storage">
+              <i class="fa-solid fa-floppy-disk"></i>
+              <span>SAVE MY ALTER EGO</span>
+            </button>
+
+            <button id="btn-copy-result" class="btn-action" title="Copy result summary to clipboard">
+              <i class="fa-solid fa-copy"></i>
+              <span>COPY RESULT</span>
+            </button>
+
+            <button id="btn-share-result" class="btn-action" title="Share result with friends">
+              <i class="fa-solid fa-share-nodes"></i>
+              <span>SHARE RESULT</span>
+            </button>
+
+            <button id="btn-download-card" class="btn-action" title="Download high-resolution identity card as PNG">
+              <i class="fa-solid fa-download"></i>
+              <span>DOWNLOAD CARD</span>
+            </button>
+
+            <button id="btn-retake-quiz" class="btn-action" title="Retake the personality quiz from question 1">
+              <i class="fa-solid fa-rotate-left"></i>
+              <span>RETAKE QUIZ</span>
+            </button>
+
+            <button id="btn-action-home" class="btn-action" title="Return to Landing Page">
+              <i class="fa-solid fa-house"></i>
+              <span>HOME</span>
+            </button>
+          </div>
+
+          <!-- AI Feature: ASK YOUR ALTER EGO -->
+          <section class="ai-chat-section" aria-labelledby="ai-chat-title">
+            <div class="ai-chat-header">
+              <div class="ai-chat-title-row">
+                <h3 id="ai-chat-title" class="ai-chat-title">
+                  <i class="fa-solid fa-comments"></i>
+                  <span>ASK YOUR ALTER EGO</span>
+                </h3>
+                <div id="chat-remaining-badge" class="questions-remaining-badge">
+                  <i class="fa-solid fa-hourglass-half"></i>
+                  <span id="chat-remaining-text">Questions remaining: 6/6</span>
+                </div>
+              </div>
+              <p class="ai-chat-desc">Send a message across the quantum fold. Your alternate self will reply directly.</p>
+            </div>
+
+            <!-- Quick Suggestion Chips -->
+            <div id="ai-suggestions-container" class="ai-suggestions-row" role="group" aria-label="Conversation Starter Prompts">
+              <button class="suggestion-chip" data-prompt="What is your world like?">What is your world like?</button>
+              <button class="suggestion-chip" data-prompt="What should I do when I feel stuck?">What should I do when I feel stuck?</button>
+              <button class="suggestion-chip" data-prompt="What is your biggest regret?">What is your biggest regret?</button>
+              <button class="suggestion-chip" data-prompt="Do you ever think about my universe?">Do you ever think about my universe?</button>
+            </div>
+
+            <!-- Chat Window -->
+            <div id="chat-messages" class="chat-history-window" role="log" aria-live="polite">
+              <!-- Initial greeting injected via JS -->
+            </div>
+
+            <!-- Chat Limit Notice (Shown after 6 questions) -->
+            <div id="chat-limit-notice" class="chat-limit-notice hidden">
+              <i class="fa-solid fa-lock"></i>
+              <span>You've used all 6 questions for this alter ego. Create another alter ego to start a new conversation.</span>
+            </div>
+
+            <!-- Chat Input Form -->
+            <form id="chat-form" class="chat-input-form">
+              <input 
+                type="text" 
+                id="chat-input" 
+                class="chat-input-field" 
+                placeholder="Ask your alter ego anything..." 
+                autocomplete="off" 
+                required 
+                aria-label="Message for your Alter Ego"
+              />
+              <button type="submit" id="btn-chat-send" class="chat-send-btn" aria-label="Send message">
+                <span>SEND</span>
+                <i class="fa-solid fa-paper-plane"></i>
+              </button>
+            </form>
+          </section>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- App Footer -->
+    <footer class="app-footer">
+      <p>ALTER EGO &copy; 2026 · Multiverse Personality System · Built with Precision & Cosmics</p>
+    </footer>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" aria-live="polite"></div>
+
+  <!-- Main Application Script (ES Module) -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
